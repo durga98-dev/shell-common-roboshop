@@ -86,6 +86,17 @@ systemd_setup(){
     VALIDATE $? "Start the service"
 }
 
+java_setup(){
+    dnf install maven -y &>>$LOG_FILE
+    VALIDATE $? "Installing Maven"
+
+    mvn clean package  &>>$LOG_FILE
+    VALIDATE $? "Packing the applications"
+
+    mv target/shipping-1.0.jar shipping.jar 
+    VALIDATE $? "Renaming the artifact"
+}
+
 app_restart(){
     systemctl restart $app_name
     VALIDATE $? "Restarted $app_name"
